@@ -27,9 +27,3 @@ def readvariables(input,location_counter):
    
 
 
-
-
-
-
-
-
