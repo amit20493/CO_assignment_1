@@ -23,3 +23,4 @@ def readvariables(input,location_counter):
     symboltable[input[location_counter][0]] = [input[location_counter][1],DecimaltoBinary(location_coutner)]
 
 #decimaltobinaryconversion here tell convert the memory address of location counter to binary one
+#valid variable to be declared in main file
