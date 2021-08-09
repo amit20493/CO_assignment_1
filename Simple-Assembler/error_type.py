@@ -24,7 +24,7 @@ def error_code(code):
     elif code==-12:
         print("Not defined in above program")
     elif code==-13:
-        print("Called in middle of progrma(not allowed) ")     
+        print("called in middle of progrma(not allowed) ")     
     elif code==-14:
         print("Not found")
     elif code==-15:
