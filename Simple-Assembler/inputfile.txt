@@ -1,9 +1,8 @@
 var x
 var y
-mov R2 y
-//comments
+mov R2 y//comments
 mov R5 x
-
+hlt
 add R3 R2 R5
 jmp label
 mov R4,R3

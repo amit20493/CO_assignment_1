@@ -20,28 +20,40 @@ def passOne():
                 Symboltable.addVariable(line[1],)        
 
 def main():
-    global programme_counter,Lines,error,numberOfLines,halt_pos
+    global programme_counter,Lines,error,numberOfLines,hlt_pos
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
     #Lines = file1.readlines("\n")
     Lines= file1.read().splitlines()
-
-    numberOfLines= len(Lines)
-    count_hlt=0
-    while("hlt" in Lines):
-        count_hlt+=1
-    if(count_hlt>1):
-        print("")    
+    count_hlt=0    
     while("" in Lines):
         Lines.remove("")
-        numberOfLines-=1
+    for line in Lines:
+        if(line[0:2]=="//"):
+            Lines.remove(line)  
+    
+    numberOfLines= len(Lines)          
     if(numberOfLines>255):
         error=-8
     else:
+        for line in Lines:
+            if("//" in line):
+                updated_line=line[0:line.index("/")].strip()
+                Lines[Lines.index(line)]=updated_line 
+
+        for lines in Lines:
+            if(lines=="hlt"):
+                count_hlt+=1
+            if(count_hlt>1):
+                print("error")
+                break 
+        if(Lines[-1]!="hlt"):
+            print("hlt not in end of file error")  
         for i in range (0,numberOfLines):
             Lines[i]=Lines[i].split(" ")
-        passOne();    
-                    
-    print(Lines)
+        #passOne();    
+        print(Lines)        
+
+
 if __name__=="__main__":
     main()
     
