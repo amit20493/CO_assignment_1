@@ -10,10 +10,9 @@ labels and their value is location counter'''
 
 # symboltable={'y':["variable",location],'label':["label",location],}
 def addVariable(variable,location):
-    
-    symboltable.append({variable:["variable",location]})
+    symboltable[variable]=["variable",location]
 def addLabel(label,location):
-    symboltable.append({label:["label",location]})
+    symboltable[label]=["label",location]
 
 
     
