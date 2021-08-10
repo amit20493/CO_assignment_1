@@ -14,9 +14,9 @@ def error_code(code):
     elif code==-7:
         print("Opcode cannot be used as a variable")
     elif code==-8:
-        print("Cannot fit program in given space (bigger than 255 words)")     
+        print("Cannot fit program in given space (bigger than 255 lines)")     
     elif code==-9:
-        print("Does not read operand(extra operand provided)")
+        print("Syntax Error")
     elif code==-10:
         print("Extra operand provided")
     elif code==-11:
@@ -29,3 +29,5 @@ def error_code(code):
         print("Not found")
     elif code==-15:
         print("Lable not initialised")
+    elif code==-16:
+        print("Variable is previsously intialised")  

@@ -2,10 +2,9 @@ var x
 var y
 mov R2 y
 mov R5 x
+
 add R3 R2 R5
 jmp label
 mov R4,R3
-label:
-    sub R4,R4,R2
-    mul R4,R4,x
+label: sub R4,R4,R2
 hlt
