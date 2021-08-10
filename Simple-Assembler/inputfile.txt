@@ -1,6 +1,7 @@
 var x
 var y
 mov R2 y
+//comments
 mov R5 x
 
 add R3 R2 R5
