@@ -22,5 +22,19 @@ def readvariables(input,location_counter):
     validvariable(input[location_counter][1],"-" )
     symboltable[input[location_counter][0]] = [input[location_counter][1],DecimaltoBinary(location_coutner)]
 
+
+    # symboltable={'y':["variable",location],'label':["label",location],}
+    def addVariable(variable,location):
+        pass
+    def addLabel(label,location):
+        pass
 #decimaltobinaryconversion here tell convert the memory address of location counter to binary one
 #valid variable to be declared in main file
+
+registers={"R0":"000","R1":"001","R2":"010","R3":"011","R4":"100","R5":"101","R6":"110","FLAGS":"111"}
+#DO NOT CHANGE
+def isImm(imm):
+    for i in imm:
+        if(i=="$"):
+            return True
+    return False        
