@@ -1,9 +1,8 @@
 from os import error, linesep
 import OpcodeTable as op
 import Symboltable
+import error_type
 from sys import stdin
-
-
 
 
 def passOne():
@@ -11,19 +10,25 @@ def passOne():
     numberOfVar=0
     for line in Lines:
         if(" " in line):
-            error=-9
+            error_type(-4)
+            exit()
+            error=-9 #-4
             break
         elif(line[0]=="var"):
             if(len(line)>2):
-                print("error")
+                error_type(-5)
+                exit()
+                print("error") #-5
             elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers)):
-                print("error")
+                error_type(-6)
+                exit()
+                print("error") #-6
             else:
                 numberOfVar+=1
                 Symboltable.addVariable(line[1],hlt_pos+numberOfVar)        
 
 def main():
-    global programme_counter,Lines,error,numberOfLines,hlt_pos,count_var
+    global program_counter,Lines,error,numberOfLines,hlt_pos,count_var
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
     #Lines = file1.readlines("\n")
     Lines= file1.read().splitlines()
@@ -43,8 +48,14 @@ def main():
                 updated_line=line[0:line.index("/")].strip()
                 Lines[Lines.index(line)]=updated_line 
 
-        if("hlt" in Lines[0:numberOfLines-1] or Lines[-1]!='hlt'):
-            print("Error as hlt not in end")
+        if("hlt" in Lines[0:numberOfLines-1]  ):
+            error_type(-1)
+            exit()
+            print("Error as hlt not in end ") #-1
+        elif Lines[-1]!='hlt':
+            error_type(-2)
+            exit()
+            print("hlt not in last")   #-2
         else:
             hlt_pos= Lines.index('hlt')   
 
@@ -59,7 +70,9 @@ def main():
                 break
         for line in Lines:
             if(line[0]=="var" and Lines.index(line)>=count_var):
-                print("var in between error")   
+                error_type(-3)
+                exit()
+                print("var in between error")  #-3
         hlt_pos-=count_var       
         print(hlt_pos)
         passOne();  

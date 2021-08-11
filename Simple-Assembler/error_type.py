@@ -1,16 +1,16 @@
 def error_code(code):
     if code==-1:
-        print("Opcode not founnd")
+        return print("hlt not being used as the last instruction")
     elif code==-2:
-        print("Symbol not found in Symbol Table")
+        return print("Missing hlt instruction")
     elif code==-3:
-        print("Symbol defined as varaiable cannot be used as a label")
+        return print("Variables not declared at the beginning")
     elif code==-4:
-        print("Label is previsously intialised")     
+        return print("Syntax error")     #doubt
     elif code==-5:
-        print("Cannot use label as a variable")
+        return print("Wrong syntax used") #IMP
     elif code==-6:
-        print("Opcode cannot be used as a label") 
+        return print("Wrong var type provided") 
     elif code==-7:
         print("Opcode cannot be used as a variable")
     elif code==-8:
