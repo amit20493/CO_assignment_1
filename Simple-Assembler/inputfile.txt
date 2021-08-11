@@ -1,12 +1,15 @@
 var x
-//comments
-var y
+//comments in new Line   
+var       y 
 
 add R2 R3 R5
+add R2          R3 R5
+add R2 R3 R5                  
+add R2 R3               R5
 mov R5 x
-add R3 R2 R5 //Comments
+add R3 R2 R5 //Comments in instruction line
 jmp check
 mov R4 R3
 check: sub R4 R4 R2
-//comments
+//comments in new line
 hlt

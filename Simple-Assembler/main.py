@@ -13,20 +13,24 @@ def passOne():
     global numberOfVars
     numberOfVar=0
     for line in Lines:
-        if("" in line or ':' in line):
+        if(':' in line):                                                #no ':' present in line
             error_type.error_code(-4,getLineIndex(' '.join(line)))
             exit()
         elif(line[0]=="var"):
-            if(len(line)>2):
+            if(len(line)>2):                                           #more than one var defined in one line
                 error_type.error_code(-4,getLineIndex(' '.join(line)))
                 exit()
             elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers)):
-                error_type.error_code(-6,getLineIndex(' '.join(line)))
+                error_type.error_code(-6,getLineIndex(' '.join(line)))      #already defined symbol used
                 exit()
             else:
                 numberOfVar+=1
                 Symboltable.addVariable(line[1],hlt_pos+numberOfVar)   
-        elif(":" in line[0]):        #[['label:','add','R0','R1','R3']]
+
+
+         #[['label:','add','R0','R1','R3']]
+
+        elif(":" in line[0]):
             label_name=line[0][0:line[0].index(":")]
             if(label_name in Symboltable.symboltable or label_name in Symboltable.registers or Symboltable.isImm(label_name) or (label_name=="var") or (label_name in op.opcode_table)):
                 error_type.error_code(-4,getLineIndex(' '.join(line)))
@@ -70,32 +74,43 @@ def checkInstruction(line_list):
 
 def main():
     global program_counter,Lines,error,numberOfLines,hlt_pos,count_var,original_file_list
+    count_hlt=0 
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
     #Lines = file1.readlines("\n")
     Lines= file1.read().splitlines()
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
     original_file_list=file1.read().splitlines() 
-    for line in original_file_list:
-            if("//" in line and line[0]!=" " and line[0]!="/"):
-                updated_line=line[0:line.index("/")].strip()
-                original_file_list[original_file_list.index(line)]=updated_line 
-    count_hlt=0 
+    
+    
+    
+    for i in range(0,len(original_file_list)):
+        line=original_file_list[i]
+        if("//" in line and line[0]!=" " and line[0]!="/"):      #Removing // after instruction in OriginalLines
+            original_file_list[i]=line[0:line.index("/")].strip()
+    
+
+    for i in range(0,len(original_file_list)):
+        line=original_file_list[i]
+        original_file_list[i]=" ".join(line.split())
+
+
     while("" in Lines):
-        Lines.remove("")
+        Lines.remove("")                                  #removing empty lines from Lines
     for line in Lines:
-        if(line[0:2]=="//"):
+        if(line[0:2]=="//"):                               #removing commented lines from Lines
             Lines.remove(line)  
     
     numberOfLines= len(Lines)          
     if(numberOfLines>255):
         error=-8
-    else:
-        for line in Lines:
-            if("//" in line):
-                updated_line=line[0:line.index("/")].strip()
-                Lines[Lines.index(line)]=updated_line 
-
-        if("hlt" in Lines[0:numberOfLines-1]  ):
+    else:                                                                      
+        for i in range(0,len(Lines)):
+            line=Lines[i]
+            if("//" in line):                                         #Removing // after instruction in Lines
+                Lines[i]=line[0:line.index("/")].strip()
+                
+        
+        if("hlt" in Lines[0:numberOfLines-1]  ):                      #hlt wrong position
             error_type.error_code(-1,getLineIndex("hlt"))
             exit()
         elif Lines[-1]!='hlt':
@@ -105,25 +120,37 @@ def main():
             hlt_pos= Lines.index('hlt')   
 
 
-        for i in range (0,numberOfLines):
-            Lines[i]=Lines[i].split(" ")
+        for i in range (0,numberOfLines):                #splitting and removing extra spaces from instruction
+            Lines[i]=Lines[i].split()
+        
+        
+        
         count_var=0
-        for line in Lines:
+        for line in Lines:                                 #counting number of vars
             if (line[0]=="var"):
                 count_var+=1
             else:
                 break
-        for line in Lines:
-            if(line[0]=="var" and Lines.index(line)>=count_var):
+
+        for i in range(0,len(Lines)):
+            line=Lines[i]                                    #var in between error
+            if(line[0]=="var" and i>=count_var):
                 error_type.error_code(-3,getLineIndex(line))
                 exit()
-        hlt_pos-=count_var      
-        print(Lines)
-        passOne()          
+        hlt_pos-=count_var       
+        
+        
+        print("Lines= ")
+        print(*Lines)
+        print("\n")
+        print("Original Lines= ")
+        print(original_file_list)
+        print("\n")
+        passOne()
+        print("Symbol Table = ")          
         print(Symboltable.symboltable)
+        print("\n")
         passTwo()
 
 if __name__=="__main__":
     main()
-    
-
