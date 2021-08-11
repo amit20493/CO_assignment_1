@@ -6,9 +6,9 @@ def error_code(code,line):
     elif code==-3:
         return print("Variables not declared at the beginning in line"+ line)
     elif code==-4:
-        return print("Syntax error in line"+ line)     #doubt
+        return print("Syntax error in line "+ str(line))     #doubt
     elif code==-5:
-        return print("Wrong syntax used in line"+ line) #IMP
+        return print("Wrong syntax used in line "+  str(line)) #IMP
     elif code==-6:
         return print("Wrong var type provided in line"+ line) 
     elif code==-7:
@@ -18,7 +18,7 @@ def error_code(code,line):
     elif code==-9:
         print("Syntax Error")
     elif code==-10:
-        print("Extra operand provided")
+        print("Extra operand provided "+str(line))
     elif code==-11:
         print("Needs more operands") 
     elif code==-12:
@@ -26,7 +26,7 @@ def error_code(code,line):
     elif code==-13:
         print("called in middle of program(not allowed) ")     
     elif code==-14:
-        print("Not found")
+        print("Not found"+str)
     elif code==-15:
         print("Lable not initialised")
     elif code==-16:

@@ -1,9 +1,12 @@
 var x
+//comments
 var y
-mov R2 y
+
+add R2 R3 R5
 mov R5 x
-add R3 R2 R5
-jmp label
+add R3 R2 R5 //Comments
+jmp check
 mov R4 R3
-label: sub R4 R4 R2
+check: sub R4 R4 R2
+//comments
 hlt
