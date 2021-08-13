@@ -8,6 +8,14 @@ from sys import stdin
 def getLineIndex(line):
     return original_file_list.index(line)+1
 
+def to8bitBinary(location):
+    locationInBinary=bin(location).replace('0b','')
+    x=locationInBinary[::-1]
+    while len(x)<8:
+        x+='0'
+    locationInBinary = x[::-1]
+    return locationInBinary    
+
 
 def passOne():
     global numberOfVars
@@ -42,41 +50,80 @@ def passOne():
 
 def passTwo():
     program_counter=0
-    for i in range(count_var,len(Lines)):
+    for i in range(count_var,len(Lines)):           
         line_list=Lines[i];    
-        if(line_list[0] not in op.opcode_table):
+        if(line_list[0] not in op.opcode_table):                         #checking if label or not
             if(line_list[0] not in Symboltable.symboltable):
                 error_type.error_code(-4,getLineIndex(' '.join(line_list)))
+                exit()
             elif(Symboltable.symboltable[line_list[0]][0]=="variable"):
-                error_type.error_code(-4,getLineIndex(' '.join(line_list)))   
+                error_type.error_code(-4,getLineIndex(' '.join(line_list)))  
+                exit() 
             else:
-                program_counter+=1   #We are on the label
+                program_counter+=1                                       #We are on the label
                 if(line_list[1] not in op.opcode_table):
-                    print("here")
                     error_type.error_code(-4,getLineIndex(' '.join(line_list)))
+                    exit()
                 else:
                     checkInstruction(line_list)
-        else:
-            program_counter+=1  
+        else:                                                         #if first element is in opcode table 
+            program_counter+=1                                         
             checkInstruction(line_list)
 
 
+
 def checkInstruction(line_list):
-    if(":" in line_list[0]):
+    if(":" in line_list[0]):                                #creating list of only instruction
         temp_line=line_list[1:len(line_list)]
     else:
         temp_line=line_list    
-    operation=temp_line[0]
-    if(len(temp_line)-1!=op.opcode_table[operation][1]):
+    output='not set yet'    
+    operation=temp_line[0]  
+    dealing_key_list=op.opcode_table[operation]      
+    numberOfOperands=dealing_key_list[1]
+    if(operation=='mov'):
+        numberOfOperands=2
+    if(len(temp_line)-1!=numberOfOperands):
         print(temp_line)
         error_type.error_code(-10,getLineIndex(' '.join(line_list)))
+        exit()
+    if(operation=='mov'):                                          #operation mov settled
+        if Symboltable.isImm(temp_line[2]):
+            dealing_key_list=dealing_key_list[0]
+        else:
+            dealing_key_list=dealing_key_list[0]
+    
+    if(numberOfOperands==3):                                     #type A solved i.e. with 3 registers
+        for i in range(1,len(temp_line)):
+            if temp_line[i] not in Symboltable.registers:
+                error_type.error_code(-4,getLineIndex(' '.join(line_list)))
+                exit()                      
+        output=dealing_key_list[0]+"00"+Symboltable.registers[temp_line[1]]+Symboltable.registers[temp_line[2]]+Symboltable.registers[temp_line[3]]
+   
+    elif numberOfOperands==1:                              #type E solved i.e with the only operand mem_addr
+        label=temp_line[1]+':'
+        if label not in Symboltable.symboltable:
+            error_type.error_code(-15,getLineIndex(' '.join(line_list))) 
+            exit()  
+        else:
+            if Symboltable.symboltable[label][0]!='label':
+                error_type.error_code(-15,getLineIndex(' '.join(line_list)))
+                exit()
+            else:
+                output=dealing_key_list[0]+"000"+to8bitBinary(Symboltable.symboltable[label][1])
+    elif numberOfOperands==0:                             #type F solved i.e. hlt statement
+        output=dealing_key_list[0]+"00000000000"
+    print(output)
+
+
+
+
 
 
 def main():
     global program_counter,Lines,error,numberOfLines,hlt_pos,count_var,original_file_list
     count_hlt=0 
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
-    #Lines = file1.readlines("\n")
     Lines= file1.read().splitlines()
     file1 = open('Simple-Assembler\inputfile.txt', 'r')
     original_file_list=file1.read().splitlines() 
@@ -140,12 +187,12 @@ def main():
         hlt_pos-=count_var       
         
         
-        print("Lines= ")
+        '''print("Lines= ")
         print(*Lines)
         print("\n")
         print("Original Lines= ")
         print(original_file_list)
-        print("\n")
+        print("\n")'''
         passOne()
         print("Symbol Table = ")          
         print(Symboltable.symboltable)
