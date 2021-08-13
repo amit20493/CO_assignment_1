@@ -16,7 +16,7 @@ def error_code(code,line):
     elif code==-8:
         print("Cannot fit program in given space (bigger than 255 lines) in line "+ str(line))     
     elif code==-9:
-        print("Syntax Error "+str(line))
+        print("Syntax Error in line "+str(line))
     elif code==-10:
         print("Extra operand provided "+str(line))
     elif code==-11:
@@ -31,3 +31,7 @@ def error_code(code,line):
         print("Lable not initialised "+ str(line))
     elif code==-16:
         print("Variable is previsously intialised " +str(line))  
+    elif code==-17:
+        print("Illegal Immediate values (less than 0 or more than 255) in line "+ str(line))
+    elif code==-18:
+        print("Illegal use of FLAGS in line "+str(line))       

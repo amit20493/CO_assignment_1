@@ -1,5 +1,7 @@
+from sys import flags
 import OpcodeTable
 import main
+import error_type
 
 symboltable={} 
 '''
@@ -21,8 +23,12 @@ def addLabel(label,location):
 
 registers = {"R0":"000","R1":"001","R2":"010","R3":"011","R4":"100","R5":"101","R6":"110","FLAGS":"111"}
 #DO NOT CHANGE
-def isImm(imm):
+def isImm(imm):  
     for i in imm:
         if(i=="$"):
             return True
-    return False        
+    return False   
+
+def inRangeImm(imm):
+    return (int(imm[1:len(imm)])>=0 and int(imm[1:len(imm)])<256)  
+

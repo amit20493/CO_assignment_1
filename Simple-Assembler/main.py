@@ -51,7 +51,7 @@ def passOne():
 def passTwo():
     program_counter=0
     for i in range(count_var,len(Lines)):           
-        line_list=Lines[i];    
+        line_list=Lines[i];   
         if(line_list[0] not in op.opcode_table):                         #checking if label or not
             if(line_list[0] not in Symboltable.symboltable):
                 error_type.error_code(-4,getLineIndex(' '.join(line_list)))
@@ -77,7 +77,7 @@ def checkInstruction(line_list):
         temp_line=line_list[1:len(line_list)]
     else:
         temp_line=line_list    
-    output='not set yet'    
+    output='not set yet'   
     operation=temp_line[0]  
     dealing_key_list=op.opcode_table[operation]      
     numberOfOperands=dealing_key_list[1]
@@ -113,6 +113,26 @@ def checkInstruction(line_list):
                 output=dealing_key_list[0]+"000"+to8bitBinary(Symboltable.symboltable[label][1])
     elif numberOfOperands==0:                             #type F solved i.e. hlt statement
         output=dealing_key_list[0]+"00000000000"
+    else:
+        if Symboltable.isImm(temp_line[1]):
+            error_type.error_code(-9,getLineIndex(' '.join(line_list)))
+        else:
+            if temp_line[1] in Symboltable.registers:
+                if Symboltable.isImm(temp_line[2]):
+                    if Symboltable.inRangeImm(temp_line[2]):
+                        output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(int(temp_line[2][1:len(temp_line[2])]))
+                    else:
+                        error_type.error_code(-17,getLineIndex(' '.join(line_list)))
+                        exit()
+                elif temp_line[2] in Symboltable.registers:
+                    output=dealing_key_list[0]+"00000"+Symboltable.registers[temp_line[1]]+Symboltable.registers[temp_line[2]]
+                elif temp_line[2] in Symboltable.symboltable:
+                    if Symboltable.symboltable[temp_line[2]][0]=='label':
+                        error_type.error_code(-15,getLineIndex(' '.join(line_list)))
+                        exit()
+                    else:
+                        output=dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(Symboltable.symboltable[temp_line[2]][1])    
+
     print(output)
 
 
@@ -170,7 +190,10 @@ def main():
         for i in range (0,numberOfLines):                #splitting and removing extra spaces from instruction
             Lines[i]=Lines[i].split()
         
-        
+        for i in range (0,len(Lines)):
+            if ("FLAGS" in Lines[i]):
+                error_type.error_code(-18,getLineIndex(' '.join(Lines[i])))
+                exit()
         
         count_var=0
         for line in Lines:                                 #counting number of vars
@@ -194,8 +217,6 @@ def main():
         print(original_file_list)
         print("\n")'''
         passOne()
-        print("Symbol Table = ")          
-        print(Symboltable.symboltable)
         print("\n")
         passTwo()
 
