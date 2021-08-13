@@ -2,6 +2,7 @@ from os import error, linesep
 import OpcodeTable as op
 import Symboltable
 import error_type
+import sys
 from sys import stdin
 
 
@@ -91,7 +92,7 @@ def checkInstruction(line_list):
         if Symboltable.isImm(temp_line[2]):
             dealing_key_list=dealing_key_list[0]
         else:
-            dealing_key_list=dealing_key_list[0]
+            dealing_key_list=dealing_key_list[1]
     
     if(numberOfOperands==3):                                     #type A solved i.e. with 3 registers
         for i in range(1,len(temp_line)):
@@ -117,7 +118,7 @@ def checkInstruction(line_list):
         if Symboltable.isImm(temp_line[1]):
             error_type.error_code(-9,getLineIndex(' '.join(line_list)))
         else:
-            if temp_line[1] in Symboltable.registers:
+            if temp_line[1] in Symboltable.registers and temp_line[1]!="FLAGS":
                 if Symboltable.isImm(temp_line[2]):
                     if Symboltable.inRangeImm(temp_line[2]):
                         output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(int(temp_line[2][1:len(temp_line[2])]))
@@ -131,23 +132,28 @@ def checkInstruction(line_list):
                         error_type.error_code(-15,getLineIndex(' '.join(line_list)))
                         exit()
                     else:
-                        output=dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(Symboltable.symboltable[temp_line[2]][1])    
-
-    print(output)
-
+                        output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(Symboltable.symboltable[temp_line[2]][1])  
+            else:
+                 error_type.error_code(-9,getLineIndex(' '.join(line_list))) 
+    output_list.append(output)         
 
 
 
 
 
 def main():
-    global program_counter,Lines,error,numberOfLines,hlt_pos,count_var,original_file_list
-    count_hlt=0 
-    file1 = open('Simple-Assembler\inputfile.txt', 'r')
+    global program_counter,Lines,numberOfLines,hlt_pos,count_var,original_file_list,output_list
+    # How to read and write the give test cases to inputfile.txt
+    file1 = open('inputfile.txt', 'w')
+    file1.truncate(0)
+    for line in sys.stdin:
+        file1.write(line)
+    file1.close()
+    file1 = open('inputfile.txt', 'r')
     Lines= file1.read().splitlines()
-    file1 = open('Simple-Assembler\inputfile.txt', 'r')
+    file1 = open('inputfile.txt', 'r')
     original_file_list=file1.read().splitlines() 
-    
+    output_list=[]
     
     
     for i in range(0,len(original_file_list)):
@@ -168,7 +174,7 @@ def main():
             Lines.remove(line)  
     
     numberOfLines= len(Lines)          
-    if(numberOfLines>255):
+    if(numberOfLines>256):
         error=-8
     else:                                                                      
         for i in range(0,len(Lines)):
@@ -180,18 +186,18 @@ def main():
         if("hlt" in Lines[0:numberOfLines-1]  ):                      #hlt wrong position
             error_type.error_code(-1,getLineIndex("hlt"))
             exit()
-        elif Lines[-1]!='hlt':
+        elif "hlt" not in Lines[-1]:
             error_type.error_code(-2,"")
             exit()
         else:
-            hlt_pos= Lines.index('hlt')   
+            hlt_pos= len(Lines)-1  
 
 
         for i in range (0,numberOfLines):                #splitting and removing extra spaces from instruction
             Lines[i]=Lines[i].split()
         
         for i in range (0,len(Lines)):
-            if ("FLAGS" in Lines[i]):
+            if ("FLAGS" in Lines[i] and "mov" not in Lines[i]):
                 error_type.error_code(-18,getLineIndex(' '.join(Lines[i])))
                 exit()
         
@@ -210,15 +216,10 @@ def main():
         hlt_pos-=count_var       
         
         
-        '''print("Lines= ")
-        print(*Lines)
-        print("\n")
-        print("Original Lines= ")
-        print(original_file_list)
-        print("\n")'''
         passOne()
-        print("\n")
         passTwo()
+        for lines in output_list:
+            print(lines)
 
 if __name__=="__main__":
     main()

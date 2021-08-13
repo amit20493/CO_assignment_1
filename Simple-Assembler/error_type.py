@@ -2,7 +2,7 @@ def error_code(code,line):
     if code==-1:
         return print("hlt not being used as the last instruction in line "+ str(line) )
     elif code==-2:
-        return print("Missing hlt instruction in line "+ str(line))
+        return print("Missing hlt instruction")
     elif code==-3:
         return print("Variables not declared at the beginning in line"+ str(line))
     elif code==-4:
