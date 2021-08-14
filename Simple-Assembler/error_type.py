@@ -1,6 +1,6 @@
 def error_code(code,line):
     if code==-1:
-        return print("hlt not being used as the last instruction in line "+ str(line) )
+        return print("hlt not being used as the last instruction in line "+ str(line)+" or multiple hlt being used " )
     elif code==-2:
         return print("Missing hlt instruction")
     elif code==-3:
@@ -12,11 +12,13 @@ def error_code(code,line):
     elif code==-6:
         print("Cannot fit program in given space (bigger than 255 lines) in line "+ str(line)) 
     elif code==-7:
-        print("Extra operand provided "+str(line))
+        print("Extra operand provided in line "+str(line))
     elif code==-8:
-       print("Lable not initialised "+ str(line))     
+       print("Lable not initialised in line "+ str(line))     
     elif code==-9:
         print("Illegal Immediate values (less than 0 or more than 255) in line "+ str(line))
     elif code==-10:
        print("Illegal use of FLAGS in line "+str(line))
+    elif code==-11:
+        print("Invalid number of operands"+str(line))   
            

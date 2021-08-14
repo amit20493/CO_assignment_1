@@ -26,10 +26,10 @@ def passOne():
             error_type.error_code(-4,getLineIndex(' '.join(line)))
             exit()
         elif(line[0]=="var"):
-            if(len(line)>2):                                           #more than one var defined in one line
+            if(len(line)!=2):                                           #more than one var defined in one line
                 error_type.error_code(-4,getLineIndex(' '.join(line)))
                 exit()
-            elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers)):
+            elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers) or (line[1] in op.opcode_table)):
                 error_type.error_code(-5,getLineIndex(' '.join(line)))      #already defined symbol used
                 exit()
             else:
@@ -45,7 +45,7 @@ def passOne():
                 error_type.error_code(-4,getLineIndex(' '.join(line)))
                 exit()
             else:
-                 Symboltable.addLabel(label_name+":",Lines.index(line)-numberOfVar)   
+                Symboltable.addLabel(label_name+":",Lines.index(line)-numberOfVar)   
 
 
 
@@ -86,7 +86,7 @@ def checkInstruction(line_list):
         numberOfOperands=2
     if(len(temp_line)-1!=numberOfOperands):
         print(temp_line)
-        error_type.error_code(-,getLineIndex(' '.join(line_list)))
+        error_type.error_code(-11,getLineIndex(' '.join(line_list)))
         exit()
     if(operation=='mov'):                                          #operation mov settled
         if Symboltable.isImm(temp_line[2]):
@@ -182,15 +182,19 @@ def main():
             if("//" in line):                                         #Removing // after instruction in Lines
                 Lines[i]=line[0:line.index("/")].strip()
                 
-        
-        if("hlt" in Lines[0:numberOfLines-1]  ):                      #hlt wrong position
-            error_type.error_code(-1,getLineIndex("hlt"))
-            exit()
-        elif "hlt" not in Lines[-1]:
+        for i in range(numberOfLines-1):
+            if("hlt" in Lines[i]):                                      #hlt wrong position
+                error_type.error_code(-1,getLineIndex(" ".join(Lines[i].split())))
+                exit()
+        if "hlt" not in Lines[-1]:
             error_type.error_code(-2,"")
             exit()
         else:
-            hlt_pos= len(Lines)-1  
+            hlt_line= Lines[-1].split()
+            if(len(hlt_line)<=2):
+                hlt_pos= len(Lines)-1
+            else:
+                error_type.error_code(-2,"")     
 
 
         for i in range (0,numberOfLines):                #splitting and removing extra spaces from instruction
