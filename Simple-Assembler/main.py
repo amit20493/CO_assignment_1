@@ -30,7 +30,7 @@ def passOne():
                 error_type.error_code(-4,getLineIndex(' '.join(line)))
                 exit()
             elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers)):
-                error_type.error_code(-6,getLineIndex(' '.join(line)))      #already defined symbol used
+                error_type.error_code(-5,getLineIndex(' '.join(line)))      #already defined symbol used
                 exit()
             else:
                 numberOfVar+=1
@@ -86,7 +86,7 @@ def checkInstruction(line_list):
         numberOfOperands=2
     if(len(temp_line)-1!=numberOfOperands):
         print(temp_line)
-        error_type.error_code(-10,getLineIndex(' '.join(line_list)))
+        error_type.error_code(-,getLineIndex(' '.join(line_list)))
         exit()
     if(operation=='mov'):                                          #operation mov settled
         if Symboltable.isImm(temp_line[2]):
@@ -104,11 +104,11 @@ def checkInstruction(line_list):
     elif numberOfOperands==1:                              #type E solved i.e with the only operand mem_addr
         label=temp_line[1]+':'
         if label not in Symboltable.symboltable:
-            error_type.error_code(-15,getLineIndex(' '.join(line_list))) 
+            error_type.error_code(-8,getLineIndex(' '.join(line_list))) 
             exit()  
         else:
             if Symboltable.symboltable[label][0]!='label':
-                error_type.error_code(-15,getLineIndex(' '.join(line_list)))
+                error_type.error_code(-8,getLineIndex(' '.join(line_list)))
                 exit()
             else:
                 output=dealing_key_list[0]+"000"+to8bitBinary(Symboltable.symboltable[label][1])
@@ -116,20 +116,20 @@ def checkInstruction(line_list):
         output=dealing_key_list[0]+"00000000000"
     else:
         if Symboltable.isImm(temp_line[1]):
-            error_type.error_code(-9,getLineIndex(' '.join(line_list)))
+            error_type.error_code(-4,getLineIndex(' '.join(line_list)))
         else:
             if temp_line[1] in Symboltable.registers and temp_line[1]!="FLAGS":
                 if Symboltable.isImm(temp_line[2]):
                     if Symboltable.inRangeImm(temp_line[2]):
                         output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(int(temp_line[2][1:len(temp_line[2])]))
                     else:
-                        error_type.error_code(-17,getLineIndex(' '.join(line_list)))
+                        error_type.error_code(-9,getLineIndex(' '.join(line_list)))
                         exit()
                 elif temp_line[2] in Symboltable.registers:
                     output=dealing_key_list[0]+"00000"+Symboltable.registers[temp_line[1]]+Symboltable.registers[temp_line[2]]
                 elif temp_line[2] in Symboltable.symboltable:
                     if Symboltable.symboltable[temp_line[2]][0]=='label':
-                        error_type.error_code(-15,getLineIndex(' '.join(line_list)))
+                        error_type.error_code(-8,getLineIndex(' '.join(line_list)))
                         exit()
                     else:
                         output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(Symboltable.symboltable[temp_line[2]][1])  
@@ -175,7 +175,7 @@ def main():
     
     numberOfLines= len(Lines)          
     if(numberOfLines>256):
-        error=-8
+        error_type.error_code(-6,"")
     else:                                                                      
         for i in range(0,len(Lines)):
             line=Lines[i]
@@ -198,7 +198,7 @@ def main():
         
         for i in range (0,len(Lines)):
             if ("FLAGS" in Lines[i] and "mov" not in Lines[i]):
-                error_type.error_code(-18,getLineIndex(' '.join(Lines[i])))
+                error_type.error_code(-10,getLineIndex(' '.join(Lines[i])))
                 exit()
         
         count_var=0
