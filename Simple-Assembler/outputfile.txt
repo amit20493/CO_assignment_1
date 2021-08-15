@@ -1,0 +1,1 @@
+hlt not being used as the last instruction in line 1 or multiple hlt being used 
