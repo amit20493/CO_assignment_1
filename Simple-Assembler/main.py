@@ -47,7 +47,7 @@ def passOne():
 
         elif(":" in line[0]):
             label_name=line[0][0:line[0].index(":")]
-            if(label_name in Symboltable.symboltable or label_name in Symboltable.registers or Symboltable.isImm(label_name) or (label_name=="var") or (label_name in op.opcode_table)):
+            if(label_name in Symboltable.symboltable or label_name in Symboltable.registers or Symboltable.isImm(label_name) or (label_name=="var") or (label_name in op.opcode_table) or len(line)<2):
                 file2.write(error_type.error_code(-4,getLineIndex(' '.join(line))))
                 print(error_type.error_code(-4,getLineIndex(' '.join(line))))
                 file2.close()
