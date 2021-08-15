@@ -145,7 +145,7 @@ def main():
     global program_counter,Lines,numberOfLines,hlt_pos,count_var,original_file_list,output_list
     # How to read and write the give test cases to inputfile.txt
     file1 = open('inputfile.txt', 'w')
-    file1.truncate(0)
+    #file1.truncate(0)
     for line in sys.stdin:
         file1.write(line)
     file1.close()
