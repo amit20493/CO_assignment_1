@@ -2,7 +2,6 @@ import registerFiles
 import executionEngine
 import sys
 import programCounter
-import Functions
 import Memory
    
 
@@ -25,7 +24,7 @@ def main():
         file1.write(line)
     file1.close()
     file1 = open('binaryfile.txt', 'r')
-    Memory.Lines= file1.read().splitMemory.Lines()
+    Memory.Lines= file1.read().splitlines()
     while(len(Memory.Lines)<256):
         Memory.Lines.append("0000000000000000")
     while(not halted):

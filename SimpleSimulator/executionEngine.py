@@ -1,6 +1,7 @@
 import Functions
 import main_simulator
 import programCounter
+import registerFiles
 
 
 def execute(instruction):
@@ -31,13 +32,13 @@ def execute(instruction):
         programCounter.pc[0]+=1
         return False
 
-    elif opcode == "00100":
+    elif opcode == "00101":
         #store func      
         Functions.store(instruction)               
         programCounter.pc[0]+=1
         return False
 
-    elif opcode == "00101":
+    elif opcode == "00100":
         #load func
         Functions.load(instruction)
         programCounter.pc[0]+=1
@@ -118,4 +119,6 @@ def execute(instruction):
         return False
 
     elif opcode == "10011":
+        for i in range(4):
+            registerFiles.FLAG[i]="0"
         return True     
