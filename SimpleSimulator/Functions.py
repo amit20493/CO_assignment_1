@@ -8,8 +8,8 @@ def add(instruction):
 
     temp = registerFiles.register[reg2] + registerFiles.register[reg3]
     if temp >= (2**16):
-        registerFiles.FLAG[0]=1
-        temp=temp=temp%(2**16)
+        registerFiles.FLAG[0]="1"
+        temp=temp%(2**16)
     registerFiles.register[reg1]=temp
     
 
@@ -21,7 +21,7 @@ def sub(instruction):
     temp = registerFiles.register[reg2] - registerFiles.register[reg3]
 
     if temp <0:
-        registerFiles.FLAG[0]=1
+        registerFiles.FLAG[0]="1"
         temp=0
     registerFiles.register[reg1]=temp        
 
@@ -32,7 +32,7 @@ def mul(instruction):
 
     temp = registerFiles.register[reg2]  * registerFiles.register[reg3]
     if temp >= (2**16):
-        registerFiles.FLAG[0]=1
+        registerFiles.FLAG[0]="1"
         temp=temp%(2**16)
     registerFiles.register[reg1]=temp
 
@@ -130,19 +130,19 @@ def jmp(instruction):
 
 
 def jlt(instruction):
-    if(registerFiles.FLAG[1]==1):
+    if(registerFiles.FLAG[1]=="1"):
         return binToDecimal(instruction[8:16])
     return main_simulator.pc+1     
 
 
 def jgt(instruction):
-    if(registerFiles.FLAG[2]==1):
+    if(registerFiles.FLAG[2]=="1"):
         return binToDecimal(instruction[8:16])
     return main_simulator.pc+1
 
 
 def je(instruction):
-    if(registerFiles.FLAG[3]==1):
+    if(registerFiles.FLAG[3]=="1"):
         return binToDecimal(instruction[8:16])
     return main_simulator.pc+1
 
@@ -154,13 +154,13 @@ def compare(instruction):
     reg2value=registerFiles.register[reg2]
 
     if(reg1value==reg2value):
-        registerFiles.FLAG[3]=1
+        registerFiles.FLAG[3]="1"
     
     elif(reg1value>reg2value):
-        registerFiles.FLAG[2]=1
+        registerFiles.FLAG[2]="1"
     
     elif(reg1value<reg2value):
-        registerFiles.FLAG[1]=1
+        registerFiles.FLAG[1]="1"
 
 
 
