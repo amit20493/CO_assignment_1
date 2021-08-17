@@ -7,6 +7,10 @@ def add(instruction):
     reg3= instruction [13:16]
 
     temp = registerFiles.register[reg2] + registerFiles.register[reg3]
+    if temp >= (2**16):
+        registerFiles.FLAG[0]=1
+        temp=temp=temp%(2**16)
+    registerFiles.register[reg1]=temp
     
 
 def sub(instruction):
@@ -16,12 +20,42 @@ def sub(instruction):
 
     temp = registerFiles.register[reg2] - registerFiles.register[reg3]
 
+    if temp <0:
+        registerFiles.FLAG[0]=1
+        temp=0
+    registerFiles.register[reg1]=temp        
+
 def mul(instruction):
     reg1= instruction[7:10]
     reg2= instruction[10:13]
     reg3= instruction [13:16]
 
     temp = registerFiles.register[reg2]  * registerFiles.register[reg3]
+    if temp >= (2**16):
+        registerFiles.FLAG[0]=1
+        temp=temp%(2**16)
+    registerFiles.register[reg1]=temp
+
+
+
+def div(instruction):
+    reg3= instruction[10:13]
+    reg4= instruction[13:16]
+    registerFiles.register["000"]=reg3/reg4
+    registerFiles.register["001"]=reg3%reg4
+
+
+def moveReg(instruction):
+    reg1= instruction[10:13]
+    reg2= instruction[13:16]
+    registerFiles.register[reg1]=registerFiles.register[reg2]
+
+
+def moveImm(instruction):
+    reg1=instruction[5:8]
+    registerFiles.register[reg1]=binToDecimal(instruction[8:16])
+
+
 
 def XOR(instruction):
     reg1= instruction[7:10]
@@ -35,7 +69,7 @@ def XOR(instruction):
     reg3value = integerto16bit(temp2)
 
     temp = reg2value ^ reg3value
-
+    registerFiles.register[reg1]=binToDecimal(temp)
     
 
 def OR(instruction):
@@ -50,6 +84,7 @@ def OR(instruction):
     reg3value = integerto16bit(temp2)
 
     temp = reg2value or reg3value
+    registerFiles.register[reg1]=binToDecimal(temp)
 
     
 
@@ -67,13 +102,21 @@ def AND(instruction):
     reg3value = integerto16bit(temp2)
 
     temp = reg2value and reg3value
+    registerFiles.register[reg1]=binToDecimal(temp)
 
+
+
+def invert(instruction):
+    reg1= instruction[10:13]
+    reg2= instruction[13:16]
+    registerFiles.register[reg1]=(2**16)-registerFiles.register[reg2]+1
 
 
 def load(instruction):
     reg1=instruction[6:9]
     mem_addr=binToDecimal(instruction[9:16])
     registerFiles.register[reg1]=binToDecimal(main_simulator.Lines[mem_addr])
+
 
 
 def store(instruction):
@@ -103,6 +146,7 @@ def je(instruction):
         return binToDecimal(instruction[8:16])
     return main_simulator.pc+1
 
+
 def compare(instruction):
     reg1= instruction[10:13]
     reg2= instruction[13:16]
@@ -117,6 +161,19 @@ def compare(instruction):
     
     elif(reg1value<reg2value):
         registerFiles.FLAG[1]=1
+
+
+
+def rightShift(instruction):
+    reg1=instruction[5:8]
+    registerFiles.register[reg1]=(registerFiles.register[reg1])/2
+    
+
+def leftShift(instruction):
+    reg1=instruction[5:8]
+    registerFiles.register[reg1]=(registerFiles.register[reg1])*2
+
+
 
 def integerto16bit(value):
     value=bin(value).replace('0b','')
