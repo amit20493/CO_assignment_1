@@ -1,19 +1,21 @@
-import Memory
-import programCounter
 import registerFiles
 import executionEngine
 
 
 def main():
-    memory=Memory()
-    rf=registerFiles()
-    PC=programCounter(0)
+    global pc
+    pc=0
     halted=False
-
+    file1 = open('SimpleSimulator/binaryfile.txt', 'r')
+    Lines= file1.read().splitlines()
     while(not halted):
-        inst=memory.getInst(PC.getVal())
-        halted, new_PC= executionEngine.execute(inst)
-        PC.dump()
-        rf.dump()
-        PC.update(new_PC)
-    memory.dump()    
+        instruction=Lines[pc]
+        print(instruction)
+        halted, pc= executionEngine.execute(instruction)
+        print(pc)
+        registerFiles.print()
+    for line in Lines:
+        print(line)
+
+if __name__=="__main__":
+    main()
