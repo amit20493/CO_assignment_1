@@ -11,7 +11,7 @@ def main():
     while(not halted):
         instruction=Lines[pc]
         print(instruction)
-        halted, pc= executionEngine.execute(instruction)
+        halted= executionEngine.execute(instruction)
         print(pc)
         registerFiles.print()
     for line in Lines:
