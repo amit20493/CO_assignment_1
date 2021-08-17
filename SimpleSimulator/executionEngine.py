@@ -26,7 +26,7 @@ def execute(instruction):
         return False
 
     elif opcode == "00100":
-        #store func
+        #store func                     
         main_simulator.pc+=1
         return False
 
@@ -80,7 +80,7 @@ def execute(instruction):
         main_simulator.pc+=1
         return False
 
-    elif opcode == "01111":
+    elif opcode == "01111":                         
         #main_simulator.pc=jump(instruction)
         return False
 
