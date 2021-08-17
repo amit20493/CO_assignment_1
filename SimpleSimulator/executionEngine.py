@@ -1,4 +1,5 @@
 import registerFiles
+import Functions
 import main_simulator
 
 def execute(instruction):
