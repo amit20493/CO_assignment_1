@@ -1,5 +1,7 @@
 import registerFiles
 import main_simulator
+import programCounter
+import Memory
 
 def add(instruction):
     reg1= instruction[7:10]
@@ -48,7 +50,12 @@ def div(instruction):
 def moveReg(instruction):
     reg1= instruction[10:13]
     reg2= instruction[13:16]
-    registerFiles.register[reg1]=registerFiles.register[reg2]
+    if(reg2=="111"):
+        temp="000000000000"+"".join(registerFiles.FLAG)
+        tempo=binToDecimal(temp)
+    else:
+        tempo=registerFiles.register[reg2]    
+    registerFiles.register[reg1]=tempo
 
 
 def moveImm(instruction):
@@ -115,14 +122,14 @@ def invert(instruction):
 def load(instruction):
     reg1=instruction[6:9]
     mem_addr=binToDecimal(instruction[9:16])
-    registerFiles.register[reg1]=binToDecimal(main_simulator.Lines[mem_addr])
+    registerFiles.register[reg1]=binToDecimal(main_simulator.Memory.Memory.Lines[mem_addr])
 
 
 
 def store(instruction):
     reg1=instruction[6:9]
     mem_addr=binToDecimal(instruction[9:16])
-    main_simulator.Lines[mem_addr]=integerto16bit(registerFiles.register[reg1])
+    main_simulator.Memory.Memory.Lines[mem_addr]=integerto16bit(registerFiles.register[reg1])
     
 
 def jmp(instruction):
@@ -132,19 +139,19 @@ def jmp(instruction):
 def jlt(instruction):
     if(registerFiles.FLAG[1]=="1"):
         return binToDecimal(instruction[8:16])
-    return main_simulator.pc+1     
+    return programCounter.pc[0]+1     
 
 
 def jgt(instruction):
     if(registerFiles.FLAG[2]=="1"):
         return binToDecimal(instruction[8:16])
-    return main_simulator.pc+1
+    return programCounter.pc[0]+1
 
 
 def je(instruction):
     if(registerFiles.FLAG[3]=="1"):
         return binToDecimal(instruction[8:16])
-    return main_simulator.pc+1
+    return programCounter.pc[0]+1
 
 
 def compare(instruction):
@@ -186,7 +193,7 @@ def integerto16bit(value):
 
 
 def binToDecimal(n):
-    num = n
+    '''num = n
     value = 0
     base = 1
     temp = num
@@ -195,4 +202,5 @@ def binToDecimal(n):
         temp = int(temp / 10) 
         value+=last_digit*base
         base = base * 2
-    return value
+    return value'''
+    return int(n,2)
