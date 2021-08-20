@@ -3,6 +3,8 @@ import programCounter
 import Memory
 
 def add(instruction):
+    for i in range(4):
+        registerFiles.FLAG[i]="0"
     reg1= instruction[7:10]
     reg2= instruction[10:13]
     reg3= instruction [13:16]
@@ -12,14 +14,14 @@ def add(instruction):
         registerFiles.FLAG[0]="1"
         temp=temp%(2**16)
     registerFiles.register[reg1]=temp
-    for i in range(4):
-        if(i!=0):
-            registerFiles.FLAG[i]="0"
+
 
     
     
 
 def sub(instruction):
+    for i in range(4):
+        registerFiles.FLAG[i]="0"
     reg1= instruction[7:10]
     reg2= instruction[10:13]
     reg3= instruction [13:16]
@@ -30,12 +32,11 @@ def sub(instruction):
         registerFiles.FLAG[0]="1"
         temp=0
     registerFiles.register[reg1]=temp
-    for i in range(4):
-        if(i!=0):
-            registerFiles.FLAG[i]="0"
           
 
 def mul(instruction):
+    for i in range(4):
+        registerFiles.FLAG[i]="0"
     reg1= instruction[7:10]
     reg2= instruction[10:13]
     reg3= instruction [13:16]
@@ -45,9 +46,6 @@ def mul(instruction):
         registerFiles.FLAG[0]="1"
         temp=temp%(2**16)
     registerFiles.register[reg1]=temp
-    for i in range(4):
-        if(i!=0):
-            registerFiles.FLAG[i]="0"
 
 
 
@@ -195,6 +193,8 @@ def je(instruction):
 
 
 def compare(instruction):
+    for i in range(4):
+        registerFiles.FLAG[i]="0"
     reg1= instruction[10:13]
     reg2= instruction[13:16]
     reg1value=registerFiles.register[reg1]
@@ -213,14 +213,16 @@ def compare(instruction):
 
 def rightShift(instruction):
     reg1=instruction[5:8]
-    registerFiles.register[reg1]=(registerFiles.register[reg1])/2
+    imm= binToDecimal(instruction[8:16])
+    registerFiles.register[reg1]=(registerFiles.register[reg1])/(2**imm)
     for i in range(4):
         registerFiles.FLAG[i]="0"
     
 
 def leftShift(instruction):
     reg1=instruction[5:8]
-    registerFiles.register[reg1]=(registerFiles.register[reg1])*2
+    imm= binToDecimal(instruction[8:16])
+    registerFiles.register[reg1]=(registerFiles.register[reg1])*(2**imm)
     for i in range(4):
         registerFiles.FLAG[i]="0"
 
