@@ -41,6 +41,9 @@ def main():
         print(line)
     x_axis,y_axis=zip(*Memory.plot_list)
     plt.plot(x_axis,y_axis)
+    plt.title("Memory vs Cycle plot")
+    plt.xlabel("Cycle")
+    plt.ylabel("Memory")
     plt.savefig('plot.png')
 
 
