@@ -35,14 +35,14 @@ def execute(instruction,cycle):
     elif opcode == "00101":
         #store func      
         mem_addr=Functions.store(instruction)
-        main_simulator.plot_list.append([cycle,mem_addr])               
+        main_simulator.Memory.plot_list.append([cycle,mem_addr])               
         programCounter.pc[0]+=1
         return False
 
     elif opcode == "00100":
         #load func
         mem_addr=Functions.load(instruction)
-        main_simulator.plot_list.append([cycle,mem_addr])
+        main_simulator.Memory.plot_list.append([cycle,mem_addr])
         programCounter.pc[0]+=1
         return False
 
