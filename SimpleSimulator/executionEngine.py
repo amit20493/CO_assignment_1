@@ -4,7 +4,7 @@ import programCounter
 import registerFiles
 
 
-def execute(instruction):
+def execute(instruction,cycle):
     
     opcode=instruction[0:5]
 
@@ -34,13 +34,15 @@ def execute(instruction):
 
     elif opcode == "00101":
         #store func      
-        Functions.store(instruction)               
+        mem_addr=Functions.store(instruction)
+        main_simulator.plot_list.append([cycle,mem_addr])               
         programCounter.pc[0]+=1
         return False
 
     elif opcode == "00100":
         #load func
-        Functions.load(instruction)
+        mem_addr=Functions.load(instruction)
+        main_simulator.plot_list.append([cycle,mem_addr])
         programCounter.pc[0]+=1
         return False
 

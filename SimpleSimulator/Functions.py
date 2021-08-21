@@ -144,7 +144,7 @@ def load(instruction):
     registerFiles.register[reg1]=binToDecimal(Memory.Lines[mem_addr])
     for i in range(4):
         registerFiles.FLAG[i]="0"
-
+    return mem_addr
 
 
 def store(instruction):
@@ -153,6 +153,7 @@ def store(instruction):
     Memory.Lines[mem_addr]=integerto16bit(registerFiles.register[reg1])
     for i in range(4):
         registerFiles.FLAG[i]="0"
+    return mem_addr    
     
 
 def jmp(instruction):
