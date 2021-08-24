@@ -15,12 +15,12 @@ opcode_table={
     "ls" :["01001",2,0,True,False,True,False,False,False],
     "xor":["01010",3,2,True,True,False,False,False,False],
     "or" :["01011",3,2,True,True,False,False,False,False],
-    "and":["01010",3,2,True,True,False,False,False,False],
+    "and":["01100",3,2,True,True,False,False,False,False],
     "not":["01101",2,5,True,True,False,False,False,False],
     "cmp":["01110",2,5,False,True,False,False,False,True],
     "jmp":["01111",1,3,False,False,False,True,False,False],
     "jlt":["10000",1,3,False,False,False,True,True,False],
     "jgt":["10001",1,3,False,False,False,True,True,False],
-    "je" :["10000",1,3,False,False,False,True,True,False],
+    "je" :["10010",1,3,False,False,False,True,True,False],
     "hlt":["10011",0,11,False,False,False,False,False,False]
 }

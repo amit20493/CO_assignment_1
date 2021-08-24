@@ -33,7 +33,7 @@ def passOne():
                 print(error_type.error_code(-4,getLineIndex(' '.join(line))))
                 file2.close()
                 exit()
-            elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers) or (line[1] in op.opcode_table)):
+            elif((line[1] in Symboltable.symboltable) or Symboltable.isImm(line[1]) or (line[1] in Symboltable.registers) or (line[1] in op.opcode_table) or (line[1]=="var")):
                 file2.write(error_type.error_code(-5,getLineIndex(' '.join(line))))      #already defined symbol used
                 print(error_type.error_code(-5,getLineIndex(' '.join(line))))
                 file2.close()
@@ -91,8 +91,7 @@ def checkInstruction(line_list):
     if(":" in line_list[0]):                                #creating list of only instruction
         temp_line=line_list[1:len(line_list)]
     else:
-        temp_line=line_list    
-    output='not set yet'   
+        temp_line=line_list      
     operation=temp_line[0]  
     dealing_key_list=op.opcode_table[operation]      
     numberOfOperands=dealing_key_list[1]
@@ -141,6 +140,7 @@ def checkInstruction(line_list):
             file2.write(error_type.error_code(-4,getLineIndex(' '.join(line_list))))
             print(error_type.error_code(-4,getLineIndex(' '.join(line_list))))
             file2.close()
+            exit()
         else:
             if temp_line[1] in Symboltable.registers and temp_line[1]!="FLAGS":
                 if Symboltable.isImm(temp_line[2]):
@@ -161,10 +161,16 @@ def checkInstruction(line_list):
                         exit()
                     else:
                         output= dealing_key_list[0]+Symboltable.registers[temp_line[1]]+to8bitBinary(Symboltable.symboltable[temp_line[2]][1])  
+                else:
+                    file2.write(error_type.error_code(-3,getLineIndex(' '.join(line_list))))
+                    print(error_type.error_code(-3,getLineIndex(' '.join(line_list))))
+                    file2.close()
+                    exit()       
             else:
                  file2.write(error_type.error_code(-9,getLineIndex(' '.join(line_list)))) 
                  print(error_type.error_code(-9,getLineIndex(' '.join(line_list))))
                  file2.close()
+                 exit()
     output_list.append(output)         
 
 
@@ -258,8 +264,8 @@ def main():
         for i in range(0,len(Lines)):
             line=Lines[i]                                    #var in between error
             if(line[0]=="var" and i>=count_var):
-                file2.write(error_type.error_code(-3,getLineIndex(line)))
-                print(error_type.error_code(-3,getLineIndex(line)))
+                file2.write(error_type.error_code(-3,getLineIndex(" ".join(line))))
+                print(error_type.error_code(-3,getLineIndex(" ".join(line))))
                 file2.close()
                 exit()
         hlt_pos-=count_var       

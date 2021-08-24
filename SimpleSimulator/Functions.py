@@ -52,7 +52,7 @@ def mul(instruction):
 def div(instruction):
     reg3= instruction[10:13]
     reg4= instruction[13:16]
-    registerFiles.register["000"]=reg3/reg4
+    registerFiles.register["000"]=int(reg3/reg4)
     registerFiles.register["001"]=reg3%reg4
     for i in range(4):
         registerFiles.FLAG[i]="0"
@@ -215,7 +215,7 @@ def compare(instruction):
 def rightShift(instruction):
     reg1=instruction[5:8]
     imm= binToDecimal(instruction[8:16])
-    registerFiles.register[reg1]=(registerFiles.register[reg1])/(2**imm)
+    registerFiles.register[reg1]=int((registerFiles.register[reg1])/(2**imm))
     for i in range(4):
         registerFiles.FLAG[i]="0"
     
